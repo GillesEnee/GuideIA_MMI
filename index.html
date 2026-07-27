@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide IA pour les Enseignants BUT MMI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            color: #1e293b;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-active {
+            border-bottom: 2px solid #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+            background-color: #eff6ff;
+        }
+        .wizard-btn {
+            transition: all 0.2s;
+        }
+        .wizard-btn:hover, .wizard-btn.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
+
+    <div class="w-full max-w-6xl space-y-6">
+        
+        <!-- Header -->
+        <header class="text-center space-y-3 mb-8">
+            <div class="inline-flex items-center justify-center p-3 bg-blue-100 rounded-full mb-2">
+                <span class="material-icons text-blue-600 text-4xl">school</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">Guide IA : Enseignants BUT MMI</h1>
+            <p class="text-slate-600 max-w-2xl mx-auto">Un outil d'accompagnement étape par étape pour intégrer l'Intelligence Artificielle de manière éthique, légale et performante dans vos enseignements.</p>
+        </header>
+
+        <!-- Main Navigation -->
+        <nav class="glass-panel rounded-xl shadow-sm overflow-hidden flex flex-wrap justify-center sm:justify-start">
+            <button onclick="switchTab('outils')" id="tab-outils" class="tab-btn tab-active px-4 md:px-6 py-4 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                <span class="material-icons text-base">travel_explore</span> Trouver une IA
+            </button>
+            <button onclick="switchTab('prompt')" id="tab-prompt" class="tab-btn px-4 md:px-6 py-4 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                <span class="material-icons text-base">chat</span> Comment prompter
+            </button>
+            <button onclick="switchTab('consignes')" id="tab-consignes" class="tab-btn px-4 md:px-6 py-4 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                <span class="material-icons text-base">rule</span> Consignes IUT
+            </button>
+            <button onclick="switchTab('ethique')" id="tab-ethique" class="tab-btn px-4 md:px-6 py-4 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                <span class="material-icons text-base">balance</span> Éthique
+            </button>
+            <button onclick="switchTab('europe')" id="tab-europe" class="tab-btn px-4 md:px-6 py-4 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 flex items-center gap-2">
+                <span class="material-icons text-base">public</span> L'IA en Europe
+            </button>
+        </nav>
+
+        <!-- Section 1 : Assistant de recherche d'outils -->
+        <section id="content-outils" class="glass-panel rounded-xl shadow-sm p-6 md:p-8 animate-fade-in">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2">Quel est votre besoin d'enseignement ?</h2>
+                <p class="text-slate-500 text-sm">Sélectionnez votre pôle du BUT MMI pour découvrir les IA recommandées (issues du document de référence <em>Comparatif outils IA pour chercheurs.pdf</em> et autres sources).</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+                <button onclick="selectCategory('dev')" id="btn-cat-dev" class="wizard-btn flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg bg-white text-slate-700 gap-2">
+                    <span class="material-icons">code</span> Développement Web
+                </button>
+                <button onclick="selectCategory('design')" id="btn-cat-design" class="wizard-btn flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg bg-white text-slate-700 gap-2">
+                    <span class="material-icons">brush</span> Création & Design
+                </button>
+                <button onclick="selectCategory('av')" id="btn-cat-av" class="wizard-btn flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg bg-white text-slate-700 gap-2">
+                    <span class="material-icons">movie</span> Audiovisuel & Son
+                </button>
+                <button onclick="selectCategory('comm')" id="btn-cat-comm" class="wizard-btn flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg bg-white text-slate-700 gap-2">
+                    <span class="material-icons">campaign</span> Communication
+                </button>
+                <button onclick="selectCategory('droit')" id="btn-cat-droit" class="wizard-btn flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg bg-white text-slate-700 gap-2">
+                    <span class="material-icons">gavel</span> Droit & RGPD
+                </button>
+                <button onclick="selectCategory('pedagogie')" id="btn-cat-pedagogie" class="wizard-btn flex flex-col items-center justify-center p-4 border border-slate-200 rounded-lg bg-white text-slate-700 gap-2">
+                    <span class="material-icons">school</span> Pédagogie & Recherche
+                </button>
+            </div>
+
+            <!-- Tools Results Container -->
+            <div id="tools-results" class="hidden">
+                <h3 class="text-lg font-semibold mb-4 flex items-center gap-2 border-b pb-2">
+                    <span class="material-icons text-emerald-500">check_circle</span> Outils recommandés
+                </h3>
+                <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- JS Injected Cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2 : Comment bien prompter -->
+        <section id="content-prompt" class="glass-panel rounded-xl shadow-sm p-6 md:p-8 hidden animate-fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <span class="material-icons text-blue-500">chat</span> L'Art du Prompt Pédagogique
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">La méthode CRFA</h3>
+                    <p class="text-slate-600 mb-4 text-sm">Pour obtenir des résultats précis d'une IA générative, il est essentiel de structurer sa demande. La méthode <strong>Contexte, Rôle, Format, Action</strong> est idéale pour les enseignants.</p>
+                    
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="material-icons text-blue-500 text-sm mt-0.5">person</span>
+                            <div><strong>Rôle :</strong> Donnez une identité à l'IA. <em>(Ex: "Agis comme un expert en droit du numérique...")</em></div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="material-icons text-emerald-500 text-sm mt-0.5">assignment</span>
+                            <div><strong>Action :</strong> Définissez la tâche précise. <em>(Ex: "...rédige un cas pratique sur le RGPD...")</em></div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="material-icons text-amber-500 text-sm mt-0.5">groups</span>
+                            <div><strong>Contexte :</strong> Précisez le public. <em>(Ex: "...pour des étudiants de BUT MMI 1ère année.")</em></div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="material-icons text-purple-500 text-sm mt-0.5">view_list</span>
+                            <div><strong>Format :</strong> Structurez la sortie. <em>(Ex: "...sous forme de tableau avec corrigé détaillé.")</em></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <h3 class="font-semibold mb-4">Générateur de Prompt Enseignant</h3>
+                    <div class="space-y-3 mb-4">
+                        <input type="text" id="input-role" class="w-full px-3 py-2 text-sm rounded border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Rôle (ex: Professeur de dev web)">
+                        <input type="text" id="input-task" class="w-full px-3 py-2 text-sm rounded border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Action (ex: Créer un QCM sur React)">
+                        <input type="text" id="input-audience" class="w-full px-3 py-2 text-sm rounded border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contexte (ex: Débutants, BUT 2)">
+                        <input type="text" id="input-format" class="w-full px-3 py-2 text-sm rounded border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Format (ex: Liste à puces avec correction)">
+                    </div>
+                    <button id="generate-btn" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition text-sm">
+                        Générer mon prompt
+                    </button>
+                    
+                    <div id="prompt-result" class="mt-4 hidden relative">
+                        <textarea id="output-prompt" readonly class="w-full h-32 p-3 text-sm font-mono bg-white border border-slate-300 rounded resize-none outline-none"></textarea>
+                        <button id="copy-btn" class="absolute top-2 right-2 p-1.5 bg-slate-100 hover:bg-slate-200 rounded text-slate-600 flex items-center gap-1 text-xs transition">
+                            <span class="material-icons" style="font-size: 14px;">content_copy</span> Copier
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 : Consignes d'usage à l'IUT -->
+        <section id="content-consignes" class="glass-panel rounded-xl shadow-sm p-6 md:p-8 hidden animate-fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                <span class="material-icons text-blue-500">rule</span> Consignes d'usage de l'IA à l'IUT
+            </h2>
+            <p class="text-slate-500 text-sm mb-8">Inspiré du document <em>IUT 2026_CONSIGNES D'USAGE DE l'IA (1)</em> et des lignes directrices de la Commission Européenne.</p>
+
+            <!-- NOUVEAU : Tableau pour les étudiants -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <span class="material-icons text-indigo-500">campaign</span> À communiquer aux étudiants
+                </h3>
+                <p class="text-slate-600 text-sm mb-4">Cadre de référence à présenter systématiquement aux étudiants lors de la remise des consignes d'un travail (TP, SAÉ, rapport).</p>
+                
+                <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+                    <table class="w-full text-sm text-left text-slate-600">
+                        <thead class="text-xs text-slate-700 uppercase bg-slate-100 border-b border-slate-200">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 w-1/4">Statut d'usage</th>
+                                <th scope="col" class="px-6 py-4">Exemples d'utilisation par l'étudiant</th>
+                                <th scope="col" class="px-6 py-4 w-1/3">Obligations & Sanctions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ligne Autorisé -->
+                            <tr class="bg-white border-b border-slate-100 hover:bg-slate-50 transition">
+                                <td class="px-6 py-4 font-medium flex flex-col items-center gap-2 text-center">
+                                    <img src="Logo usage intégré.png" alt="Usage Intégré" class="w-24 h-auto drop-shadow-sm rounded">
+                                    <span class="text-emerald-700 font-bold text-sm">AUTORISÉ / INTÉGRÉ</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Brainstorming et recherche d'idées (idéation)</li>
+                                        <li>Explication de concepts théoriques (mode tuteur)</li>
+                                        <li>Correction orthographique et reformulation de forme</li>
+                                        <li>Aide à la compréhension d'une erreur de code</li>
+                                    </ul>
+                                </td>
+                                <td class="px-6 py-4">
+                                    Pas de déclaration formelle requise. L'IA agit comme un outil d'assistance classique.
+                                </td>
+                            </tr>
+                            <!-- Ligne Sous conditions -->
+                            <tr class="bg-white border-b border-slate-100 hover:bg-slate-50 transition">
+                                <td class="px-6 py-4 font-medium flex flex-col items-center gap-2 text-center">
+                                    <img src="Logo usage encadré.png" alt="Usage Encadré" class="w-24 h-auto drop-shadow-sm rounded">
+                                    <span class="text-amber-700 font-bold text-sm">SOUS CONDITIONS / ENCADRÉ</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Génération de snippets de code intégrés au projet</li>
+                                        <li>Génération d'assets (images, vidéos, sons de maquette)</li>
+                                        <li>Traduction automatique de textes majeurs</li>
+                                        <li>Structuration d'un plan de rapport</li>
+                                    </ul>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="font-bold text-slate-700">Citation et transparence :</span> L'étudiant doit documenter l'outil, le prompt, et préciser quelle partie exacte du rendu a été générée.
+                                </td>
+                            </tr>
+                            <!-- Ligne Interdit -->
+                            <tr class="bg-white hover:bg-slate-50 transition">
+                                <td class="px-6 py-4 font-medium flex flex-col items-center gap-2 text-center">
+                                    <img src="Logo pas d'IA.png" alt="Pas d'IA" class="w-24 h-auto drop-shadow-sm rounded">
+                                    <span class="text-red-700 font-bold text-sm">INTERDIT / PAS D'IA</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Génération complète du rendu final (copier-coller)</li>
+                                        <li>Délégation de l'analyse ou de la conclusion d'un travail</li>
+                                        <li>Utilisation lors d'une évaluation surveillée stricte</li>
+                                        <li>Invention de sources bibliographiques (hallucinations)</li>
+                                    </ul>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="font-bold text-red-600">Assimilation à la fraude :</span> L'absence de déclaration équivaut à du plagiat (usurpation de paternité intellectuelle). Sanctions disciplinaires.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transition vers enseignants -->
+            <div>
+                <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <span class="material-icons text-blue-500">local_library</span> Bon usage de l'IA pour les Enseignants
+                </h3>
+                <div class="space-y-6">
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                        <h3 class="font-bold text-red-800 flex items-center gap-2"><span class="material-icons">gavel</span> 1. Responsabilité & Évaluation</h3>
+                        <p class="text-sm text-red-700 mt-1"><strong>Ne jamais déléguer l'évaluation des étudiants à une IA.</strong> Le processus de "peer review" ou de correction de copies par une IA est proscrit. L'enseignant reste l'unique responsable de ses productions scientifiques et pédagogiques. L'IA n'est pas un auteur.</p>
+                    </div>
+
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <h3 class="font-bold text-blue-800 flex items-center gap-2"><span class="material-icons">visibility</span> 2. Transparence Totale</h3>
+                        <p class="text-sm text-blue-700 mt-1">Déclarez systématiquement l'usage d'une IA générative si elle a contribué de manière substantielle à la création d'un support de cours, d'un sujet d'examen ou d'une recherche. Demandez la même transparence à vos étudiants dans leurs rendus.</p>
+                    </div>
+
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                        <h3 class="font-bold text-amber-800 flex items-center gap-2"><span class="material-icons">shield</span> 3. Confidentialité et Propriété Intellectuelle (RGPD)</h3>
+                        <p class="text-sm text-amber-700 mt-1">Ne soumettez jamais de données personnelles d'étudiants (noms, notes, travaux non publiés) à des IA ouvertes grand public dont les données servent à l'entraînement (comme la version gratuite de ChatGPT). Utilisez des environnements locaux, fermés, ou anonymisez scrupuleusement les données.</p>
+                    </div>
+
+                    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <h3 class="font-bold text-emerald-800 flex items-center gap-2"><span class="material-icons">fact_check</span> 4. Vérification et Esprit Critique</h3>
+                        <p class="text-sm text-emerald-700 mt-1">Les IA peuvent générer des "hallucinations" (informations fausses mais plausibles) et des citations inventées. Validez toujours le contenu technique avant de le transmettre aux étudiants.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 : L'IA en Europe -->
+        <section id="content-europe" class="glass-panel rounded-xl shadow-sm p-6 md:p-8 hidden animate-fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                <span class="material-icons text-blue-500">public</span> L'IA en Europe & Souveraineté
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Cadre Réglementaire (AI Act)</h3>
+                    <p class="text-sm text-slate-600 mb-4">L'Union Européenne est pionnière dans la régulation avec l'<strong>AI Act</strong>, visant à classer les systèmes d'IA selon leur niveau de risque. La recherche et l'enseignement bénéficient d'exceptions, mais exigent une stricte conformité au RGPD et au respect des droits d'auteur pour l'entraînement des modèles (text and data mining).</p>
+                    
+                    <h3 class="text-lg font-semibold mb-2 mt-4">Initiatives Internationales</h3>
+                    <p class="text-sm text-slate-600">L'Europe s'inscrit dans les efforts mondiaux de gouvernance tels que le <em>Processus d'Hiroshima (G7)</em>, la <em>Déclaration de Bletchley</em> (sur la sécurité de l'IA) et le <em>Sommet de Paris pour l'Action sur l'IA (2025)</em>, prônant une IA inclusive et durable.</p>
+                </div>
+                <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100">
+                    <h3 class="text-lg font-semibold text-indigo-900 mb-3 flex items-center gap-2">
+                        <span class="material-icons">flag</span> La voie souveraine : Mistral AI
+                    </h3>
+                    <p class="text-sm text-indigo-800 mb-4">Pour les enseignants, il est crucial d'encourager des solutions garantissant la maîtrise des données. Mentionné dans le <em>Comparatif outils IA pour chercheurs.pdf</em>, <strong>Le Chat Mistral</strong> (Mistral AI, France) offre une alternative européenne reconnue.</p>
+                    <ul class="text-sm text-indigo-800 space-y-2">
+                        <li>✔️ Modèles ouverts (Open Source)</li>
+                        <li>✔️ Maîtrise des données hébergées en Europe</li>
+                        <li>✔️ Excellent pour l'analyse de documents et la synthèse</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5 : Éthique -->
+        <section id="content-ethique" class="glass-panel rounded-xl shadow-sm p-6 md:p-8 hidden animate-fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                <span class="material-icons text-blue-500">balance</span> Éthique de l'IA de Confiance
+            </h2>
+            <p class="text-slate-500 text-sm mb-6">Les 7 exigences de la Commission Européenne pour une "Trustworthy AI" (IA digne de confiance).</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">person</span> 1. Action et contrôle humain</h4>
+                    <p class="text-xs text-slate-600 mt-1">L'IA doit soutenir l'autonomie humaine, pas s'y substituer (Human-in-the-loop / Human-in-command).</p>
+                </div>
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">build</span> 2. Robustesse technique</h4>
+                    <p class="text-xs text-slate-600 mt-1">Sécurité, fiabilité et reproductibilité face aux risques de biais et de piratage.</p>
+                </div>
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">lock</span> 3. Respect de la vie privée</h4>
+                    <p class="text-xs text-slate-600 mt-1">Gouvernance stricte des données et respect du RGPD par défaut.</p>
+                </div>
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">visibility</span> 4. Transparence</h4>
+                    <p class="text-xs text-slate-600 mt-1">Traçabilité des données d'entraînement et explicabilité des décisions de l'IA.</p>
+                </div>
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">diversity_3</span> 5. Diversité et non-discrimination</h4>
+                    <p class="text-xs text-slate-600 mt-1">Lutte contre les biais cognitifs (ex: comportement flagorneur / <em>sycophantic behavior</em> où l'IA dit ce que l'humain veut entendre).</p>
+                </div>
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">eco</span> 6. Bien-être sociétal et environnemental</h4>
+                    <p class="text-xs text-slate-600 mt-1">L'IA est très gourmande en énergie (cycle de vie matériel et logiciel). Utiliser le bon outil pour la bonne tâche (principe de sobriété).</p>
+                </div>
+                <div class="p-4 bg-white border border-slate-200 rounded-lg shadow-sm md:col-span-2">
+                    <h4 class="font-bold text-slate-800 flex items-center gap-1"><span class="material-icons text-slate-400">gavel</span> 7. Responsabilité (Accountability)</h4>
+                    <p class="text-xs text-slate-600 mt-1">Auditabilité et responsabilité claire quant aux résultats produits par les systèmes d'IA, de l'idée à la publication.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Database of AI Tools adapted from "Comparatif outils IA pour chercheurs.pdf" and prompts
+        const toolsData = {
+            dev: [
+                { name: "GitHub Copilot", cat: "Développement", icon: "code", strength: "Génère, complète et explique le code. Intégration IDE native.", weakness: "Payant, requiert un compte GitHub.", url: "github.com/copilot" },
+                { name: "Cursor", cat: "Développement", icon: "terminal", strength: "Compréhension du contexte global d'un projet entier. IA très avancée.", weakness: "Installation d'un éditeur tiers obligatoire.", url: "cursor.com" },
+                { name: "Claude Code", cat: "Développement", icon: "api", strength: "Agent de terminal très autonome, gère des bases de code complexes.", weakness: "Usage en ligne de commande, moins visuel.", url: "claude.com/claude-code" },
+                { name: "Rosebud AI", cat: "Dév. de Jeux (Game Dev)", icon: "sports_esports", strength: "Génère des jeux complets et des assets via des prompts. Excellent pour le prototypage rapide.", weakness: "Encore jeune, axé spécifiquement sur le jeu vidéo.", url: "rosebud.ai" }
+            ],
+            design: [
+                { name: "Midjourney", cat: "Génération d'Images", icon: "palette", strength: "Photoréalisme et qualité artistique inégalés.", weakness: "Payant, interface via Discord complexe pour débutants.", url: "midjourney.com" },
+                { name: "Ideogram", cat: "Génération d'Images", icon: "text_fields", strength: "Excellent pour intégrer du texte lisible et créer des logos.", weakness: "Parfois instable sur l'anatomie humaine.", url: "ideogram.ai" },
+                { name: "Canva (Magic Studio)", cat: "Design Graphique", icon: "brush", strength: "Création rapide de slides et visuels. Très accessible.", weakness: "Fonctions IA avancées limitées en version gratuite.", url: "canva.com" }
+            ],
+            av: [
+                { name: "Suno", cat: "Génération Audio/Musique", icon: "music_note", strength: "Génère paroles, voix et instrumentaux à partir d'un prompt. Très bluffant.", weakness: "Attention aux droits d'auteur, quota gratuit limité.", url: "suno.com" },
+                { name: "Udio", cat: "Génération Audio/Musique", icon: "headphones", strength: "Production musicale de très haute qualité, idéal pour habillage sonore.", weakness: "Quotas limités en version gratuite.", url: "udio.com" },
+                { name: "Whisper (OpenAI)", cat: "Transcription Vocale", icon: "mic", strength: "Transcription et traduction de haute précision (Open Source).", weakness: "Nécessite des compétences pour l'installation locale ou passe par API.", url: "openai.com/research/whisper" },
+                { name: "HeyGen", cat: "Création Vidéo & Avatars", icon: "video_camera_front", strength: "Crée des vidéos avec des avatars ultra-réalistes et clonage vocal. Idéal pour des capsules de cours.", weakness: "Très vite coûteux, risque éthique lié aux deepfakes.", url: "heygen.com" }
+            ],
+            comm: [
+                { name: "ChatGPT", cat: "IA Conversationnelle", icon: "forum", strength: "Ultra polyvalent (texte, résumé, traduction). Idéal pour rédiger des briefs.", weakness: "Tendance aux hallucinations, nécessite un compte.", url: "chatgpt.com" },
+                { name: "DeepL", cat: "Traduction & Rédaction", icon: "translate", strength: "Traduction de haute qualité et outil de reformulation (DeepL Write).", weakness: "Version gratuite limitée sur le volume de textes.", url: "deepl.com" },
+                { name: "Antidote", cat: "Correction", icon: "spellcheck", strength: "Correction grammaticale et stylistique francophone de référence.", weakness: "Logiciel payant uniquement.", url: "antidote.info" },
+                { name: "Gamma", cat: "Création de Présentations", icon: "slideshow", strength: "Génère des présentations, sites web et documents visuellement impactants en quelques secondes.", weakness: "Personnalisation fine de la mise en page parfois capricieuse.", url: "gamma.app" },
+                { name: "Character.ai", cat: "Jeu de rôle & Personas", icon: "groups", strength: "Permet de converser avec des personnages spécifiques (simulations d'interviews, figures historiques).", weakness: "Tendance à 'halluciner' des faits pour rester dans son rôle.", url: "character.ai" }
+            ],
+            droit: [
+                { name: "Le Chat Mistral", cat: "IA Européenne", icon: "security", strength: "Souveraineté numérique, modèles ouverts, parfait pour traiter des textes juridiques sans fuite hors UE.", weakness: "Interface de base plus limitée que les géants US.", url: "chat.mistral.ai" },
+                { name: "Perplexity", cat: "Recherche Sourcée", icon: "manage_search", strength: "Fait des recherches Web en temps réel et cite ses sources (jurisprudence, textes de loi).", weakness: "Requêtes Pro (recherche profonde) limitées en gratuit.", url: "perplexity.ai" },
+                { name: "NotebookLM", cat: "Analyse de documents", icon: "policy", strength: "On peut lui fournir le RGPD en PDF et lui poser des questions strictes dessus (RAG fermé).", weakness: "Outil Google, donc écosystème US.", url: "notebooklm.google" }
+            ],
+            pedagogie: [
+                { name: "Consensus", cat: "Recherche Documentaire", icon: "science", strength: "Interroge uniquement la littérature scientifique. Évite les fausses sources.", weakness: "Principalement anglophone.", url: "consensus.app" },
+                { name: "SciSpace", cat: "Lecture d'Articles", icon: "menu_book", strength: "Explique des concepts complexes issus de PDF scientifiques. Idéal pour vulgariser.", weakness: "Fonctions avancées payantes.", url: "scispace.com" },
+                { name: "Claude (Anthropic)", cat: "Analyse de texte", icon: "psychology", strength: "Excellent pour synthétiser de longs documents et rédaction académique nuancée.", weakness: "Limites d'utilisation strictes en gratuit.", url: "claude.ai" },
+                { name: "Napkin AI", cat: "Schémas & Diagrammes", icon: "account_tree", strength: "Transforme instantanément du texte en graphiques explicatifs, idéal pour illustrer un concept.", weakness: "Styles visuels limités, parfois génériques.", url: "napkin.ai" },
+                { name: "FlowGPT", cat: "Bibliothèque de Prompts", icon: "library_books", strength: "Vaste catalogue communautaire pour trouver des modèles de requêtes efficaces.", weakness: "Qualité très variable selon les créateurs des prompts.", url: "flowgpt.com" },
+                { name: "FutureTools", cat: "Veille Technologique", icon: "travel_explore", strength: "Annuaire exhaustif des IA mises à jour quotidiennement (L'outil pour trouver l'outil).", weakness: "Peut être chronophage face à l'abondance d'outils.", url: "futuretools.io" }
+            ]
+        };
+
+        // Tab Switching Logic
+        const tabs = ['outils', 'prompt', 'consignes', 'europe', 'ethique'];
+        
+        function switchTab(activeTabId) {
+            tabs.forEach(tab => {
+                document.getElementById(`tab-${tab}`).classList.remove('tab-active');
+                document.getElementById(`tab-${tab}`).classList.add('text-slate-600');
+                document.getElementById(`content-${tab}`).classList.add('hidden');
+            });
+            
+            document.getElementById(`tab-${activeTabId}`).classList.add('tab-active');
+            document.getElementById(`tab-${activeTabId}`).classList.remove('text-slate-600');
+            document.getElementById(`content-${activeTabId}`).classList.remove('hidden');
+        }
+
+        // Tool Wizard Logic
+        let currentCategory = null;
+
+        function selectCategory(cat) {
+            // Reset buttons
+            document.querySelectorAll('.wizard-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white', 'border-blue-600');
+                btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+            });
+            
+            // Set active button
+            const activeBtn = document.getElementById(`btn-cat-${cat}`);
+            activeBtn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+            activeBtn.classList.add('active', 'bg-blue-600', 'text-white', 'border-blue-600');
+
+            // Render tools
+            const resultsContainer = document.getElementById('tools-results');
+            const grid = document.getElementById('tools-grid');
+            grid.innerHTML = ''; // Clear previous
+
+            toolsData[cat].forEach(tool => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col h-full";
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <span class="material-icons">${tool.icon}</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 leading-tight">${tool.name}</h3>
+                            <span class="text-xs font-medium text-slate-500">${tool.cat}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mt-auto text-sm mb-4">
+                        <div class="flex items-start gap-2">
+                            <span class="material-icons text-emerald-500 text-base mt-0.5">add_circle</span>
+                            <p class="text-slate-600 leading-snug"><span class="font-semibold text-slate-700">Force:</span> ${tool.strength}</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="material-icons text-rose-500 text-base mt-0.5">remove_circle</span>
+                            <p class="text-slate-600 leading-snug"><span class="font-semibold text-slate-700">Faiblesse:</span> ${tool.weakness}</p>
+                        </div>
+                    </div>
+                    <a href="https://${tool.url}" target="_blank" rel="noopener noreferrer" class="mt-auto block text-center w-full py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold rounded transition">
+                        Visiter l'outil <span class="material-icons text-[12px] align-middle">open_in_new</span>
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+
+            resultsContainer.classList.remove('hidden');
+        }
+
+        // Prompt Generator Logic
+        const btnGenerate = document.getElementById('generate-btn');
+        const outputPrompt = document.getElementById('output-prompt');
+        const promptResult = document.getElementById('prompt-result');
+        const btnCopy = document.getElementById('copy-btn');
+
+        btnGenerate.addEventListener('click', () => {
+            const role = document.getElementById('input-role').value.trim() || "Professeur universitaire";
+            const task = document.getElementById('input-task').value.trim() || "Générer un support de cours pédagogique";
+            const audience = document.getElementById('input-audience').value.trim() || "Des étudiants de l'enseignement supérieur";
+            const format = document.getElementById('input-format').value.trim() || "Un texte clair et structuré";
+
+            const generatedText = `Agis en tant que : ${role}.\n\n` +
+                                  `Ta tâche principale : ${task}.\n\n` +
+                                  `Contexte et public cible : ${audience}.\n\n` +
+                                  `Format attendu du livrable : ${format}.\n\n` +
+                                  `Rédige le contenu de manière claire, académique et directement utilisable. Indique tes sources si nécessaire.`;
+
+            outputPrompt.value = generatedText;
+            promptResult.classList.remove('hidden');
+            btnCopy.innerHTML = '<span class="material-icons" style="font-size: 14px;">content_copy</span> Copier';
+            btnCopy.classList.remove('text-emerald-600');
+        });
+
+        btnCopy.addEventListener('click', () => {
+            outputPrompt.select();
+            document.execCommand('copy');
+            btnCopy.innerHTML = '<span class="material-icons" style="font-size: 14px;">check</span> Copié !';
+            btnCopy.classList.add('text-emerald-600');
+        });
+
+    </script>
+</body>
+</html>
